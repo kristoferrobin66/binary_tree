@@ -9,32 +9,26 @@ template <typename T>
 class Tree
 {
 public:
-    Tree(){}
+    Tree()
+    { root = nullptr; }
     virtual ~Tree(){}
 
-    void push(const T& element);
-    void pop();
+    void push(const T& element = 0);
+    void show();
 
 private:
-    Node<T> root;
+    Node<T>* root;
 };
 #endif
 
 template <typename T>
 void Tree<T>::push(const T& element)
 {
-    if (!root)
-        root = new Node<T>(element);
-    else
-    {
-        Node<T>* node = root;
-        while(!node->leaf())
-        {
-            if (node->data > element)
-                node = node->right;
-            else
-                node = node->left;
-        }
-        node->push(element);
-    }
+    node_push(root, element);
+}
+
+template <typename T>
+void Tree<T>::show()
+{
+    show_inorder(root);
 }

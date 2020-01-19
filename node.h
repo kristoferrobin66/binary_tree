@@ -1,39 +1,52 @@
 #ifndef NODE_H
 #define NODE_H
-#include <iostream>
 
-template<typename T>
+#include<iostream>
+
+template<class T>
 struct Node
 {
-    Node()
+    Node(const T& element)
     {
-        left = nullptr;
+        data = element;
         right = nullptr;
-        nodeLevel = 0;
+        left = nullptr;
     }
     virtual ~Node(){}
 
-    void push(const T& element);
-    bool leaf();
-
-    Node* right;
-    Node* left;
+    // Atricutes
     T data;
-    size_t nodeLevel;
+    Node<T>* right;
+    Node<T>* left;
 };
-#endif // NODE_H
 
+// push() function (NOT METHOD)
 template <typename T>
-bool Node<T>::leaf()
+void node_push(Node<T>*& node, const T& element)
 {
-    return !(right || left);
+    if (node == nullptr)
+        node = new Node<T>(element);
+    else if(element == node->data)
+        throw std::range_error("Node already in tree");
+    else if(element < node->data)
+        node_push(node->left, element);
+    else if(element > node->data)
+        node_push(node->right, element);
 }
 
+// show_inorder() function (NOT METHOD)
 template <typename T>
-void Node<T>::push(const T& element)
+void show_inorder(Node<T>*& node)
 {
-    if (element > data)
-        right = new Node<T>(element);
+    if(!node)
+        return;
     else
-        left  = new Node<T>(element);
+    {
+        show_inorder(node->left);
+        std::cout << node->data << std::endl;
+
+        show_inorder(node->right);
+    }
 }
+
+#endif
